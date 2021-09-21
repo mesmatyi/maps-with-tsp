@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project</title>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script> 
+
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <h1>Google Maps</h1>
+    <div class='container'>
+        <h2 id="text-center">Where do you start?</h2>
+        <form id= "location-form">
+            <input type="text" id="start-input">
+            
+            <button type="submit">Submit</button>
+        </form>
+        <div id="formatted-address"></div>
+        <div id="address-components"></div>
+        <div id="geometry"></div>
+    </div>
+
+    <div><h2>WTF</h2></div>
+
+
+    <div class='container'><div id="map"></div></div>
+    
+
+
+
+
+
+    <script async
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDaomzBPGjAnjdsjUln-S2Di9YFCESsHHo&callback=initMap">
+</script>
+<script src="/index.js"></script>
+</body>
+</html>
