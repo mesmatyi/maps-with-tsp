@@ -1,3 +1,5 @@
+let MarkerArray = []
+
 function initMap() {
   var options = {
     center: { lat: 47.68501, lng: 16.59049 },
@@ -22,6 +24,7 @@ function initMap() {
     infoWindow = new google.maps.InfoWindow({
       position: mapsMouseEvent.latLng,
     });
+    MarkerArray.push(mapsMouseEvent.latLng.toJSON());
     infoWindow.setContent(
       JSON.stringify(mapsMouseEvent.latLng.toJSON(), null, 2)
     );
@@ -33,12 +36,6 @@ function initMap() {
     addMarker({ location: event.latLng });
   });
 
-  let MarkerArray = [];
-
-  for (let i = 0; i < MarkerArray.length; i++) {
-    addMarker(addMarker[i]);
-  }
-
   function addMarker(property) {
     const marker = new google.maps.Marker({
       position: property.location,
@@ -46,29 +43,81 @@ function initMap() {
       icon: property.imageIcon,
     });
   }
-
-  //calculate the distance
-  const R = 6371e3; // metres
-  const φ1 = (lat1 * Math.PI) / 180; // φ, λ in radians
-  const φ2 = (lat2 * Math.PI) / 180;
-  const Δφ = ((lat2 - lat1) * Math.PI) / 180;
-  const Δλ = ((lon2 - lon1) * Math.PI) / 180;
-
-  const a =
-    Math.sin(Δφ / 2) * Math.sin(Δφ / 2) +
-    Math.cos(φ1) * Math.cos(φ2) * Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
-  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-
-  const d = R * c; // in metres
 }
 //geocode();
 //getLocationForm
 var locationForm = document.getElementById("location-form");
-
 //Listen for submit
 locationForm.addEventListener("submit", geocode);
 
-function geocode(e) {
+function getMatrixFromResponse(responsJson,cost_type)
+{
+  let cost_matrix = [];
+  let cost_base = 'durations';
+  if(cost_type != '')
+  {
+    cost_base = 'distances';
+  }
+
+  for (let matrix_elem in responsJson[cost_base])
+  {
+    cost_matrix.push([]);
+    for (let cost in responsJson[cost_base][matrix_elem])
+    {
+      cost_matrix[matrix_elem].push(responsJson[cost_base][matrix_elem][cost])
+    }
+  }
+  console.log(cost_matrix);
+  // Call TSP Solver from here !
+  // with cost_matrix
+
+}
+
+
+function plan_route()
+{
+
+  const plan_profile = 'walking';
+  
+  const cost_type = ''; // Null is duration, or distance
+  let cost_add = '';
+
+  if(cost_type != '')
+  {
+    cost_add = ('&annotations=' + cost_type);
+  }
+
+  const approach_type = 'curb';
+  
+  let coords = '';
+  MarkerArray.forEach(marker => {
+    coords += (marker['lng'] + ',' + marker['lat'] + ';');
+  });
+
+  coords = coords.slice(0,-1);
+
+  let approach = '';
+  for(let i = 0;i < MarkerArray.length;i++)
+  {
+    approach += (approach_type + ';'); 
+  }
+
+  approach = approach.slice(0,-1);
+
+  const url='https://api.mapbox.com/directions-matrix/v1/mapbox/' + plan_profile + '/' + coords + 
+  '?approaches=' + approach + cost_add + 
+  '&access_token=pk.eyJ1IjoibWVzaWNzbWF0eWkiLCJhIjoiY2swM2pndWttMGE0ZjNtcDU0Yjc1ejF0YiJ9.QTpGLoEnNwVb6lR1xab2NQ';
+
+  fetch(url)
+  .then(data=> data.json())
+  .then((res) => this.getMatrixFromResponse(res,cost_type))
+  .catch(error=>{console.log(error)})
+  
+
+}
+
+function geocode(e) 
+{
   //Prevent actual submit
   e.preventDefault();
 
