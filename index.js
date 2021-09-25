@@ -50,16 +50,24 @@ var locationForm = document.getElementById("location-form");
 //Listen for submit
 locationForm.addEventListener("submit", geocode);
 
-function getMatrixFromResponse(responsJson)
+function getMatrixFromResponse(responsJson,cost_type)
 {
-
   let cost_matrix = [];
-  for (let matrix_elem in responsJson['durations'])
+  let cost_base = 'durations';
+  if(cost_type != '')
+  {
+    cost_base = 'distances';
+  }
+
+
+
+  console.log(cost_type);
+  for (let matrix_elem in responsJson[cost_base])
   {
     cost_matrix.push([]);
-    for (let cost in responsJson['durations'][matrix_elem])
+    for (let cost in responsJson[cost_base][matrix_elem])
     {
-      cost_matrix[matrix_elem].push(responsJson['durations'][matrix_elem][cost])
+      cost_matrix[matrix_elem].push(responsJson[cost_base][matrix_elem][cost])
     }
   }
   console.log(cost_matrix);
@@ -71,6 +79,19 @@ function getMatrixFromResponse(responsJson)
 
 function plan_route()
 {
+
+  const plan_profile = 'walking';
+  
+  const annotation_add = '&annotations=';
+  const cost_type = ''; // Null is duration, or distance
+  let cost_add = '';
+
+  if(cost_type != '')
+  {
+    cost_add = (annotation_add + cost_type);
+  }
+
+  const approach_type = 'curb';
   
   let coords = '';
   MarkerArray.forEach(marker => {
@@ -82,16 +103,16 @@ function plan_route()
   let approach = '';
   for(let i = 0;i < MarkerArray.length;i++)
   {
-    approach += 'curb;'; 
+    approach += (approach_type + ';'); 
   }
 
   approach = approach.slice(0,-1);
 
-  const url='https://api.mapbox.com/directions-matrix/v1/mapbox/driving/' + coords + '?approaches=' + approach + '&access_token=pk.eyJ1IjoibWVzaWNzbWF0eWkiLCJhIjoiY2swM2pndWttMGE0ZjNtcDU0Yjc1ejF0YiJ9.QTpGLoEnNwVb6lR1xab2NQ';
+  const url='https://api.mapbox.com/directions-matrix/v1/mapbox/' + plan_profile + '/' + coords + '?approaches=' + approach + cost_add + '&access_token=pk.eyJ1IjoibWVzaWNzbWF0eWkiLCJhIjoiY2swM2pndWttMGE0ZjNtcDU0Yjc1ejF0YiJ9.QTpGLoEnNwVb6lR1xab2NQ';
 
   fetch(url)
   .then(data=> data.json())
-  .then((res) => this.getMatrixFromResponse(res))
+  .then((res) => this.getMatrixFromResponse(res,cost_type))
   .catch(error=>{console.log(error)})
   
 
