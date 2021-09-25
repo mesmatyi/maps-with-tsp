@@ -59,9 +59,6 @@ function getMatrixFromResponse(responsJson,cost_type)
     cost_base = 'distances';
   }
 
-
-
-  console.log(cost_type);
   for (let matrix_elem in responsJson[cost_base])
   {
     cost_matrix.push([]);
@@ -82,13 +79,12 @@ function plan_route()
 
   const plan_profile = 'walking';
   
-  const annotation_add = '&annotations=';
   const cost_type = ''; // Null is duration, or distance
   let cost_add = '';
 
   if(cost_type != '')
   {
-    cost_add = (annotation_add + cost_type);
+    cost_add = ('&annotations=' + cost_type);
   }
 
   const approach_type = 'curb';
@@ -108,7 +104,9 @@ function plan_route()
 
   approach = approach.slice(0,-1);
 
-  const url='https://api.mapbox.com/directions-matrix/v1/mapbox/' + plan_profile + '/' + coords + '?approaches=' + approach + cost_add + '&access_token=pk.eyJ1IjoibWVzaWNzbWF0eWkiLCJhIjoiY2swM2pndWttMGE0ZjNtcDU0Yjc1ejF0YiJ9.QTpGLoEnNwVb6lR1xab2NQ';
+  const url='https://api.mapbox.com/directions-matrix/v1/mapbox/' + plan_profile + '/' + coords + 
+  '?approaches=' + approach + cost_add + 
+  '&access_token=pk.eyJ1IjoibWVzaWNzbWF0eWkiLCJhIjoiY2swM2pndWttMGE0ZjNtcDU0Yjc1ejF0YiJ9.QTpGLoEnNwVb6lR1xab2NQ';
 
   fetch(url)
   .then(data=> data.json())
