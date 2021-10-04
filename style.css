@@ -1,5 +1,14 @@
-#right-panel-link {
-  position: absolute;
-  top: 0;
-  right: 0;
-}
+#info {
+  display: table;
+  position: fixed;
+  margin: 10px auto;
+  word-wrap: anywhere;
+  white-space: pre-wrap;
+  padding: 0px;
+  border-radius: 5px;
+  border:rgb(255, 255, 255);
+  font-size: 15px;
+  text-align: center;
+  color: #222;
+  background: rgb(255, 255, 255);
+  }

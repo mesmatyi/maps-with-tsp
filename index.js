@@ -22,7 +22,6 @@ var options = {
 
 function success(pos) {
   var crd = pos.coords;
-  console.log(pos.coords);
 
   initMap(pos.coords);
 }
@@ -115,7 +114,7 @@ function initMap(coords)
       new MapboxGeocoder({
       accessToken: mapboxgl.accessToken,
       localGeocoder: coordinatesGeocoder,
-      zoom: 4,
+      zoom: 12,
       placeholder: 'Search for places',
       mapboxgl: mapboxgl,
       reverseGeocode: true
