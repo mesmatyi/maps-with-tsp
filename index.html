@@ -5,26 +5,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Project</title>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script> 
-
     <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
 </head>
 <body>
-    <h1>Google Maps</h1>
-    <div class='container'>
-        <h2 id="text-center">Where do you start?</h2>
-        <form id= "location-form">
-            <input type="text" id="start-input">
-            
-            <button type="submit">Submit</button>
-        </form>
-        <div id="formatted-address"></div>
-        <div id="address-components"></div>
-        <div id="geometry"></div>
+    <div class="container">
+        <div id="map" class="map1"></div>
+        <div class="search">
+            <h1 id="text-center">Where do you start?</h1>
+            <form id= "location-form">
+                <input type="text" id="start-input" class="data">
+                <button type="submit" class="search-btn">Submit</button>
+            </form>
+            <div id="formatted-address" class="fonts"></div>
+            <div id="address-components" class="fonts"></div>
+            <div id="geometry" class="fonts"></div>
+            <button onclick="plan_route()" class="search-btn">Plan route!</button>
+        </div>
     </div>
-    
-    <div class='container'><div id="map"></div></div>
-
-    <button onclick="plan_route()">Plan route!</button>
 
 
     <script async
