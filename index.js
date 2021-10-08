@@ -1,5 +1,6 @@
 let MarkerArray = []
 
+let route_geojson = null;
 
 function zoom_scale(accuracy)
 {
@@ -32,8 +33,8 @@ function error(err) {
   initMap(coords);
 }
 
-navigator.geolocation.getCurrentPosition(success, error, options);
 
+navigator.geolocation.getCurrentPosition(success, error, options);
 
 function initMap(coords)
 {
@@ -50,9 +51,26 @@ function initMap(coords)
   mapboxgl.accessToken = 'pk.eyJ1IjoibWVzaWNzbWF0eWkiLCJhIjoiY2swM2pndWttMGE0ZjNtcDU0Yjc1ejF0YiJ9.QTpGLoEnNwVb6lR1xab2NQ';
   map = new mapboxgl.Map({
   container: 'map', // container ID
-  style: 'mapbox://styles/mapbox/outdoors-v11', // style URL
+  style: 'mapbox://styles/mapbox/cjaudgl840gn32rnrepcb9b9g', // style URL
   center: [lng, lat], // starting position [lng, lat]
   zoom: zoom // starting zoom
+  });
+
+  map.on('load', () => {
+    map.addSource('dem', {
+    'type': 'raster-dem',
+    'url': 'mapbox://mapbox.mapbox-terrain-dem-v1'
+    });
+    map.addLayer(
+    {
+    'id': 'hillshading',
+    'source': 'dem',
+    'type': 'hillshade'
+    // insert below waterway-river-canal-shadow;
+    // where hillshading sits in the Mapbox Outdoors style
+    },
+    'waterway-river-canal-shadow'
+    );
   });
   
   map.on('click', (e) => {
@@ -120,7 +138,121 @@ function initMap(coords)
       reverseGeocode: true
       })
     );
+}
+function routeCallback(route)
+{
+  route_geojson = route;
+  if(!map.isSourceLoaded('route'))
+  {
+    map.addSource('route', {
+    'type': 'geojson',
+    'data': {
+    'type': 'Feature',
+    'properties': {},
+    'geometry': {
+    'type': 'LineString',
+    'coordinates': route['routes'][0]['geometry']['coordinates']
     }
+    }
+    });
+    
+  }
+  else
+  {
+    map.removeLayer('route');
+    map.removeSource('route');
+    map.addSource('route', {
+      'type': 'geojson',
+      'data': {
+        'type': 'Feature',
+        'properties': {},
+        'geometry': {
+          'type': 'LineString',
+          'coordinates': route['routes'][0]['geometry']['coordinates']
+        }
+      }
+    });
+  }
+  map.addLayer({
+  'id': 'route',
+  'type': 'line',
+  'source': 'route',
+  'layout': {
+  'line-join': 'round',
+  'line-cap': 'round'
+  },
+  'paint': {
+  'line-color': '#5c96f2',
+  'line-width': 8
+    }
+  });
+}
+
+function onStartedDownload(id) {
+  console.log(`Started downloading: ${id}`);
+}
+
+function onFailed(error) {
+  console.log(`Download failed: ${error}`);
+}
+
+
+function generate_gpx()
+{
+
+  console.log(navigator.userAgent);
+
+  // console.log(route_geojson.routes[0]);
+  var gpx_ready = togpx(route_geojson.routes[0]);
+  console.log(gpx_ready);
+
+  var downloading = chrome.downloads.download({
+    url : "https://example.org/image.png",
+    filename : 'my-image-again.png',
+    conflictAction : 'uniquify'
+  });
+  
+  downloading.then(onStartedDownload, onFailed);
+}
+
+function getDirections(order)
+{
+  const plan_profile = 'walking';
+  
+  const cost_type = ''; // Null is duration, or distance
+  let cost_add = '';
+
+  if(cost_type != '')
+  {
+    cost_add = ('&annotations=' + cost_type);
+  }
+
+  const approach_type = 'curb';
+  
+  let coords = '';
+  order.forEach(index => {
+    coords += (MarkerArray[index]['lng'] + ',' + MarkerArray[index]['lat'] + ';');
+  });
+
+  coords = coords.slice(0,-1);
+
+  let approach = '';
+  for(let i = 0;i < MarkerArray.length;i++)
+  {
+    approach += (approach_type + ';'); 
+  }
+
+  approach = approach.slice(0,-1);
+
+  const url='https://api.mapbox.com/directions/v5/mapbox/' + plan_profile + '/' + coords + 
+  '?&overview=full&geometries=geojson&access_token=pk.eyJ1IjoibWVzaWNzbWF0eWkiLCJhIjoiY2swM2pndWttMGE0ZjNtcDU0Yjc1ejF0YiJ9.QTpGLoEnNwVb6lR1xab2NQ';
+
+  fetch(url)
+  .then(data=> data.json())
+  .then((res) => this.routeCallback(res))
+  .catch(error=>{console.log(error)}) 
+}
+
 
 function getMatrixFromResponse(responsJson,cost_type)
 {
@@ -139,7 +271,8 @@ function getMatrixFromResponse(responsJson,cost_type)
       cost_matrix[matrix_elem].push(responsJson[cost_base][matrix_elem][cost])
     }
   }
-  console.log(cost_matrix);
+  let vec;
+  getDirections(minKoltseg(cost_matrix,cost_matrix,vec));
   // Call TSP Solver from here !
   // with cost_matrix
 

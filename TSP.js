@@ -2,11 +2,11 @@
 
 function osszehasonlitas(lista1, lista2){
     for (let i = 0; i < lista1.length; ++i){
-        if (lista1[i] == "W")
+        if (lista1[i] == 0)
             continue;
-        if (lista2[i] == "W"){
+        if (lista2[i] == 0){
             lista1.splice(i, 1);
-            lista1.splice(i, 0, "W");
+            lista1.splice(i, 0, 0);
         }
         if (lista2[i] < lista1[i]){
             lista1.splice(i, 1);
@@ -63,7 +63,7 @@ function TSP_Nearest_Addition(s_matrix, vec){
         let _min = 10000000;
         if (r == 0){
             for (let i = 0; i < s_matrix.length; ++i){
-                if (vec[i] != "W" && vec[i] < _min){
+                if (vec[i] != 0 && vec[i] < _min){
                     _min = vec[i];
                     idx = i;
                 }
@@ -74,7 +74,7 @@ function TSP_Nearest_Addition(s_matrix, vec){
         {
             vec = osszehasonlitas(vec, s_matrix[idx]);
             for (let i = 0; i < s_matrix.length; ++i){
-                if (vec[i] != "W" && vec[i] < _min){
+                if (vec[i] != 0 && vec[i] < _min){
                     _min = vec[i];
                     idx = i;
                 }
@@ -86,7 +86,7 @@ function TSP_Nearest_Addition(s_matrix, vec){
     return reszkorut;
 }
 
-function TSP_Nearest_Insertion(s_matrix, vec){
+function TSP_Nearest_Insertion(matrix,s_matrix, vec){
     let reszkorut = [0];
     let idx = 0;
     let r = 0;
@@ -95,7 +95,7 @@ function TSP_Nearest_Insertion(s_matrix, vec){
         let _min = 10000000;
         if (r == 0){
             for (let i = 0; i < s_matrix.length; ++i){
-                if (vec[i] != "W" && vec[i] <_min){
+                if (vec[i] != 0 && vec[i] <_min){
                     _min = vec[i];
                     k = i;
                 }
@@ -106,7 +106,7 @@ function TSP_Nearest_Insertion(s_matrix, vec){
         {
             vec = osszehasonlitas(vec, s_matrix[k]);
             for (let i = 0; i < s_matrix.length; ++i){
-                if (vec[i] != "W" && vec[i] < _min){
+                if (vec[i] != 0 && vec[i] < _min){
                     _min = vec[i];
                     k = i;
                 }
@@ -128,7 +128,7 @@ function TSP_Farthest_Insertion(s_matrix, vec){
         let _max = -1;
         if (r == 0){
             for (let i = 0; i < s_matrix.length; ++i){
-                if (vec[i] != "W" && vec[i] > _max){
+                if (vec[i] != 0 && vec[i] > _max){
                     _max = vec[i];
                     k = i;
                 }
@@ -139,7 +139,7 @@ function TSP_Farthest_Insertion(s_matrix, vec){
         {
             vec = osszehasonlitas(vec, s_matrix[k]);
             for (let i = 0; i < s_matrix.length; ++i){
-                if (vec[i] != "W" && vec[i] > _max){
+                if (vec[i] != 0 && vec[i] > _max){
                     _max = vec[i];
                     k = i;
                 }
@@ -173,7 +173,7 @@ function minKoltseg(matrix, s_matrix, vec){
     let celfuggveny_F_I = 0.0;
 
     vec = JSON.parse(JSON.stringify(matrix[0]));
-    reszkorut_N_I = TSP_Nearest_Insertion(s_matrix, vec);
+    reszkorut_N_I = TSP_Nearest_Insertion(matrix,s_matrix, vec);
     celfuggveny_N_I = celfuggvenyKiszamitasa(matrix, reszkorut_N_I);
 
     vec = JSON.parse(JSON.stringify(matrix[0]));
@@ -188,22 +188,27 @@ function minKoltseg(matrix, s_matrix, vec){
 
 }
 
-/*
-let matrix = [["W", 2, 11, 10, 8, 7, 6, 5],
-              [6, "W", 1, 8, 8, 4, 6, 7],
-              [5, 12, "W", 11, 8, 12, 3, 11],
-              [11, 9, 10, "W", 1, 9, 8, 10],
-              [11, 11, 9, 4, "W", 2, 10, 9],
-              [12, 8, 5, 2, 11, "W", 11, 9],
-              [10, 11, 12, 10, 9, 12, "W", 3],
-              [7, 10, 10, 10, 6, 3, 1, "W"]]
-*/
+function callback()
+{
+    let matrix = [[0, 2, 11, 10, 8, 7, 6, 5],
+                  [6, 0, 1, 8, 8, 4, 6, 7],
+                  [5, 12, 0, 11, 8, 12, 3, 11],
+                  [11, 9, 10, 0, 1, 9, 8, 10],
+                  [11, 11, 9, 4, 0, 2, 10, 9],
+                  [12, 8, 5, 2, 11, 0, 11, 9],
+                  [10, 11, 12, 10, 9, 12, 0, 3],
+                  [7, 10, 10, 10, 6, 3, 1, 0]]
+    
+    
+    let s_matrix = JSON.parse(JSON.stringify(matrix));
+    let vec = JSON.parse(JSON.stringify(matrix[0]));
+    let m = [];
+    m = minKoltseg(matrix, s_matrix, vec);
+    console.log(m);
 
-let s_matrix = JSON.parse(JSON.stringify(matrix));
-let vec = JSON.parse(JSON.stringify(matrix[0]));
-let m = [];
-m = minKoltseg(matrix, s_matrix, vec);
-console.log(m);
+}
+
+// callback();
 
 // console.log(s_matrix);
 // console.log(m);

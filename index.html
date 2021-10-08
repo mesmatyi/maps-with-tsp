@@ -14,18 +14,26 @@ body { margin: 0; padding: 0; }
 </style>
 </head>
 <body>
+    
     <div id="map"></div>
 
     <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.2/mapbox-gl-geocoder.min.js"></script>
     <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.2/mapbox-gl-geocoder.css" type="text/css">
     <script src = "index.js"></script>
+    <script src = "TSP.js"></script>
+    <script src = "togpx.js"></script>
     <pre id="info">
         <button class="btn btn-outline-success" type="submit" onclick=plan_route()>
             Plan route
         </button>
+        
     </pre>
-    <!-- <nav class="navbar navbar-light bg-light text-left">
-    </nav> -->
+
+    <pre id="download">
+        <button type="button" class="btn btn-primary" type="submit" onclick=generate_gpx()>Download GPX</button>
+        
+
+    </pre>
  
 </body>
 </html>
