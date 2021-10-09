@@ -196,23 +196,27 @@ function onFailed(error) {
   console.log(`Download failed: ${error}`);
 }
 
+function download_gpx(filename, text) {
+  var element = document.createElement('a');
+  element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+  element.setAttribute('download', filename);
+
+  element.style.display = 'none';
+  document.body.appendChild(element);
+
+  element.click();
+
+  document.body.removeChild(element);
+}
+
 
 function generate_gpx()
 {
-
-  console.log(navigator.userAgent);
-
-  // console.log(route_geojson.routes[0]);
+  
   var gpx_ready = togpx(route_geojson.routes[0]);
   console.log(gpx_ready);
-
-  var downloading = chrome.downloads.download({
-    url : "https://example.org/image.png",
-    filename : 'my-image-again.png',
-    conflictAction : 'uniquify'
-  });
   
-  downloading.then(onStartedDownload, onFailed);
+  download_gpx("route.gpx", gpx_ready);
 }
 
 function getDirections(order)
