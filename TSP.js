@@ -159,7 +159,7 @@ function min(matrix,s_matrix, a, b, c){
         return TSP_Nearest_Addition(matrix, vec);
     } 
     else if(b < c){
-        return TSP_Nearest_Insertion(s_matrix, vec);
+        return TSP_Nearest_Insertion(matrix,s_matrix, vec);
     } else return TSP_Farthest_Insertion(s_matrix, vec);
 }
 

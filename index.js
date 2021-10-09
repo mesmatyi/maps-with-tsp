@@ -213,9 +213,7 @@ function download_gpx(filename, text) {
 function generate_gpx()
 {
   
-  var gpx_ready = togpx(route_geojson.routes[0]);
-  console.log(gpx_ready);
-  
+  var gpx_ready = togpx(route_geojson.routes[0]);  
   download_gpx("route.gpx", gpx_ready);
 }
 
@@ -276,6 +274,7 @@ function getMatrixFromResponse(responsJson,cost_type)
     }
   }
   let vec;
+  // console.log(cost_matrix);
   getDirections(minKoltseg(cost_matrix,cost_matrix,vec));
   // Call TSP Solver from here !
   // with cost_matrix
