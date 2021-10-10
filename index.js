@@ -198,7 +198,7 @@ function onFailed(error) {
 
 function download_gpx(filename, text) {
   var element = document.createElement('a');
-  element.setAttribute('href', encodeURIComponent(text));
+  element.setAttribute('href', 'data:XML;charset=utf-8,' + encodeURIComponent(text));
   element.setAttribute('download', filename);
 
   element.style.display = 'none';
