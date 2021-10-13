@@ -1,35 +1,39 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Project</title>
-    <script src="https://unpkg.com/axios/dist/axios.min.js"></script> 
-
-    <link rel="stylesheet" href="style.css">
+<meta charset="utf-8">
+<title>Maps with TSP</title>
+<link rel="stylesheet" href="style.css">
+<meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+<link href="https://api.mapbox.com/mapbox-gl-js/v2.5.0/mapbox-gl.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+<script src="https://api.mapbox.com/mapbox-gl-js/v2.5.0/mapbox-gl.js"></script>
+<style>
+body { margin: 0; padding: 0; }
+#map { position: absolute; top: 0; bottom: 0; width: 100%; }
+</style>
 </head>
 <body>
-    <h1>Google Maps</h1>
-    <div class='container'>
-        <h2 id="text-center">Where do you start?</h2>
-        <form id= "location-form">
-            <input type="text" id="start-input">
-            
-            <button type="submit">Submit</button>
-        </form>
-        <div id="formatted-address"></div>
-        <div id="address-components"></div>
-        <div id="geometry"></div>
-    </div>
     
-    <div class='container'><div id="map"></div></div>
+    <div id="map"></div>
 
-    <button onclick="plan_route()">Plan route!</button>
+    <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.2/mapbox-gl-geocoder.min.js"></script>
+    <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.2/mapbox-gl-geocoder.css" type="text/css">
+    <script src = "index.js"></script>
+    <script src = "TSP.js"></script>
+    <script src = "togpx.js"></script>
+    <pre id="info">
+        <button class="btn btn-outline-success" type="submit" onclick=plan_route()>
+            Plan route
+        </button>
+        
+    </pre>
 
+    <pre id="download">
+        <button type="button" class="btn btn-primary" type="submit" onclick=generate_gpx()>Download GPX</button>
+        
 
-    <script async
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDaomzBPGjAnjdsjUln-S2Di9YFCESsHHo&callback=initMap">
-</script>
-<script src="index.js"></script>
+    </pre>
+ 
 </body>
 </html>
