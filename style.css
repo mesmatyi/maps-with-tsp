@@ -1,31 +1,89 @@
 #info {
-  display: table;
-  position:fixed;
-  margin: 10px auto;
-  word-wrap: anywhere;
-  white-space: pre-wrap;
-  padding: 0px;
-  border-radius: 5px;
-  border:rgb(255, 255, 255);
-  font-size: 15px;
-  text-align: center;
-  color: #222;
-  background: rgb(255, 255, 255);
-  }
-
+  position: absolute;
+  bottom: 120px;
+  left: 27%;
+}
 #download {
   display: table;
-  position:fixed;
+  position: absolute;
   bottom: 50px;
-  left: 10px;
+  left: 20%;
   margin: 10px auto;
   word-wrap: anywhere;
   white-space: pre-wrap;
   padding: 0px;
   border-radius: 5px;
-  border:rgb(255, 255, 255);
+  border: rgb(255, 255, 255);
   font-size: 15px;
   text-align: center;
   color: #222;
   background: rgb(255, 255, 255);
-  }
+}
+
+.sidebar {
+  position: fixed;
+  left: -250px;
+  width: 250px;
+  height: 100%;
+  background: white;
+  transition: all 0.5s ease;
+}
+#check {
+  display: none;
+}
+label #btn {
+  position: absolute;
+  background: #042331;
+  border-radius: 3px;
+  cursor: pointer;
+}
+label #cancel {
+  position: absolute;
+  background: white;
+  border-radius: 3px;
+  cursor: pointer;
+}
+label #btn {
+  left: 40px;
+  top: 25px;
+  font-size: 35px;
+  color: white;
+  padding: 6px 12px;
+  transition: all 0.5s;
+}
+label #cancel {
+  z-index: 1111;
+  left: -195px;
+  top: 17px;
+  font-size: 30px;
+  color: #0a5275;
+  padding: 4px 9px;
+  transition: all 0.5s ease;
+}
+#check:checked ~ .sidebar {
+  left: 0;
+}
+#check:checked ~ label #btn {
+  left: 250px;
+  opacity: 0;
+  pointer-events: none;
+}
+#check:checked ~ label #cancel {
+  left: 195px;
+}
+#full {
+  position: absolute;
+}
+.sidebar .types {
+  position: absolute;
+  top: 8px;
+  left: 40%;
+  transform: translate(-50%);
+  font-size: 25px;
+  padding: 5px;
+}
+.points {
+  position: absolute;
+  top: 75px;
+  color: #0a5275;
+}
