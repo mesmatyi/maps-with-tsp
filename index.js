@@ -308,6 +308,7 @@ function getDirections(order)
   final_route.forEach(element => {
     coords += element['lng'] + ',' + element['lat'] + ';';
   });
+  
 
   coords = coords.slice(0,-1);
 
@@ -379,23 +380,29 @@ function midPoint(coord1,coord2){
 
 function segment_distances()
 {
-  for(let i = 0;i < black_markers.length;i++)
-  {
-    let min_dist = 100000000;
-    let index_loc = null;
-    for(let j = 0;j < red_markers.length;j++)
-    {
-      actual_dist = coords_dist(black_markers[i],red_markers[j]);
-      if(actual_dist < min_dist)
-      {
-        actual_dist = min_dist;
-        index_loc = j;
-      }
-    }
-    coord_pairs.push({'black':black_markers[i],'red':red_markers[index_loc]});
-    red_markers.splice(index_loc);
+  // for(let i = 0;i < black_markers.length;i++)
+  // {
+  //   let min_dist = 100000000;
+  //   let index_loc = null;
+  //   for(let j = 0;j < red_markers.length;j++)
+  //   {
+  //     actual_dist = coords_dist(black_markers[i],red_markers[j]);
+  //     if(actual_dist < min_dist)
+  //     {
+  //       actual_dist = min_dist;
+  //       index_loc = j;
+  //     }
+  //   }
+  //   coord_pairs.push({'black':black_markers[i],'red':red_markers[index_loc]});
+  //   red_markers.splice(index_loc);
 
+  // }
+  for(let i = 0; i < black_markers.length;i++)
+  {
+    coord_pairs.push({'black':black_markers[i],'red':red_markers[i]});
   }
+
+
   coord_pairs.forEach(element => {
     midpoints.push(midPoint(element['black'],element['red']));
   });
