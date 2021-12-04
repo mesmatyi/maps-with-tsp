@@ -24,14 +24,9 @@ body { margin: 0; padding: 0; }
         </label>
         <div class="sidebar">
             <div class="types">
-                <a href="#"><i class="fas fa-car"></i></a>
-                <a href="#"><i class="fas fa-bus"></i></a>
-                <a href="#"><i class="fas fa-bicycle"></i></a>
-                <a href="#"><i class="fas fa-walking"></i></i></a>
-            </div>
-            <div class="points">
-                <li>Ide jöhetnek ebbe a listaba</li>
-                <li>Azok a cimek amiket valasztott</li>
+                <a href="javascript:set_car_routing()"><i class="fas fa-car"></i></a>
+                <a href="javascript:set_cycling_routing()"><i class="fas fa-bicycle"></i></a>
+                <a href="javascript:set_walking_routing()"><i class="fas fa-walking"></i></i></a>
             </div>
             <div id="info">
                 <button class="btn btn-outline-success" type="submit" onclick=plan_route()>

@@ -4,10 +4,41 @@ let red_markers = []
 let coord_pairs = []
 let midpoints = []
 black_marker = true;
+plan_profile = 'walking';
+let multi_point = true;
 
 
 
 let route_geojson = null;
+function toggle_multi_point()
+{
+  if(multi_point)
+  {
+    multi_point = false;
+  }
+  else
+  {
+    multi_point = true;
+  }
+}
+
+function set_car_routing()
+{
+  plan_profile = 'driving-traffic';
+}
+function set_cycling_routing()
+{
+  plan_profile = 'cycling';
+}
+function set_walking_routing()
+{
+  plan_profile = 'walking';
+}
+
+function load_satelite_map()
+{
+  map.remove();
+}
 
 function coords_dist(coords1, coords2) {
 
@@ -80,6 +111,7 @@ function initMap(coords)
   zoom: zoom // starting zoom
   });
 
+
   map.on('load', () => {
     map.addSource('dem', {
     'type': 'raster-dem',
@@ -100,22 +132,56 @@ function initMap(coords)
   map.on('click', (e) => {
 
     MarkerArray.push(e.lngLat.wrap());
-    if(black_marker == true)
+    if(multi_point)
     {
-      black_markers.push(e.lngLat.wrap());
-      new mapboxgl.Marker({ color: 'black'})
-        .setLngLat([e.lngLat.wrap()['lng'],e.lngLat.wrap()['lat']])
-        .addTo(map);
-      black_marker = false;
+      if(black_marker == true)
+      {
+        black_markers.push(e.lngLat.wrap());
+        new mapboxgl.Marker({ color: 'black'})
+          .setLngLat([e.lngLat.wrap()['lng'],e.lngLat.wrap()['lat']])
+          .addTo(map);
+        black_marker = false;
 
+      }
+      else
+      {
+        red_markers.push(e.lngLat.wrap());
+        new mapboxgl.Marker({ color: 'red'})
+          .setLngLat([e.lngLat.wrap()['lng'],e.lngLat.wrap()['lat']])
+          .addTo(map);
+        black_marker = true;
+        map.addSource('route', {
+          'type': 'geojson',
+          'data': {
+          'type': 'Feature',
+          'properties': {},
+          'geometry': {
+          'type': 'LineString',
+          'coordinates': route['routes'][0]['geometry']['coordinates']
+          }
+          }
+          });
+          map.addLayer({
+            'id': 'route',
+            'type': 'line',
+            'source': 'route',
+            'layout': {
+            'line-join': 'round',
+            'line-cap': 'round'
+            },
+            'paint': {
+            'line-color': '#6a0dad',
+            'line-width': 4
+              }
+            });
+      }
     }
     else
     {
-      red_markers.push(e.lngLat.wrap());
-      new mapboxgl.Marker({ color: 'red'})
-        .setLngLat([e.lngLat.wrap()['lng'],e.lngLat.wrap()['lat']])
-        .addTo(map);
-      black_marker = true;
+      black_markers.push(e.lngLat.wrap());
+        new mapboxgl.Marker({ color: 'black'})
+          .setLngLat([e.lngLat.wrap()['lng'],e.lngLat.wrap()['lat']])
+          .addTo(map);
     }
   });
 
@@ -260,6 +326,15 @@ function get_coords(order)
 {
   let final_route = []
 
+  if(!multi_point)
+  {
+    order.forEach(index => {
+      final_route.push({'lng':MarkerArray[index]['lng'],'lat':MarkerArray[index]['lat']});
+    });
+
+    return final_route;
+  }
+
 
   final_route.push({'lng':midpoints[order[0]]['black']['lng'],'lat':midpoints[order[0]]['black']['lat']});
   final_route.push({'lng':midpoints[order[0]]['red']['lng'],'lat':midpoints[order[0]]['red']['lat']});
@@ -291,8 +366,6 @@ function getDirections(order)
 {
 
   final_route = get_coords(order);
-
-  const plan_profile = 'walking';
   
   const cost_type = ''; // Null is duration, or distance
   let cost_add = '';
@@ -380,6 +453,8 @@ function midPoint(coord1,coord2){
 
 function segment_distances()
 {
+  midpoints = [];
+  coord_pairs = [];
   // for(let i = 0;i < black_markers.length;i++)
   // {
   //   let min_dist = 100000000;
@@ -397,22 +472,27 @@ function segment_distances()
   //   red_markers.splice(index_loc);
 
   // }
-  for(let i = 0; i < black_markers.length;i++)
+  if(multi_point)
   {
-    coord_pairs.push({'black':black_markers[i],'red':red_markers[i]});
+    for(let i = 0; i < black_markers.length;i++)
+    {
+      coord_pairs.push({'black':black_markers[i],'red':red_markers[i]});
+    }
+    coord_pairs.forEach(element => {
+      midpoints.push(midPoint(element['black'],element['red']));
+    });
   }
-
-
-  coord_pairs.forEach(element => {
-    midpoints.push(midPoint(element['black'],element['red']));
-  });
+  else
+  {
+    MarkerArray.forEach(marker => {
+      midpoints.push({'lng':marker['lng'],'lat':marker['lat']})
+    });
+  }
 }
 
 function plan_route()
 {
   segment_distances();
-
-  const plan_profile = 'walking';
   
   const cost_type = ''; // Null is duration, or distance
   let cost_add = '';
