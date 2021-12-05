@@ -15,7 +15,45 @@ body { margin: 0; padding: 0; }
 </style>
 </head>
 <body>
+        <style>
+        #menu {
+            position: absolute;
+            background: #efefef;
+            padding: 10px;
+            right: 10px;
+            bottom: 10px;
+            font-family: 'Open Sans', sans-serif;
+        }
+        </style>
+
         <div id="map"></div>
+        <div id="menu">
+            <input id="satellite-streets-v11" type="radio" name="rtoggle" value="satellite">
+            <!-- See a list of Mapbox-hosted public styles at -->
+            <!-- https://docs.mapbox.com/api/maps/styles/#mapbox-styles -->
+            <label for="satellite-streets-v11">satellite</label>
+            <input id="light-v10" type="radio" name="rtoggle" value="light">
+            <label for="light-v10">light</label>
+            <input id="dark-v10" type="radio" name="rtoggle" value="dark">
+            <label for="dark-v10">dark</label>
+            <input id="streets-v11" type="radio" name="rtoggle" value="streets">
+            <label for="streets-v11">streets</label>
+            <input id="cjaudgl840gn32rnrepcb9b9g" type="radio" name="rtoggle" value="outdoors" checked="checked">
+            <label for="cjaudgl840gn32rnrepcb9b9g">outdoors</label>
+        </div>
+        <script>
+            
+            const layerList = document.getElementById('menu');
+            const inputs = layerList.getElementsByTagName('input');
+            
+            for (const input of inputs) {
+            input.onclick = (layer) => {
+            const layerId = layer.target.id;
+            map.setStyle('mapbox://styles/mapbox/' + layerId);
+            plan_route();
+            };
+            }
+        </script>
 
         <input type="checkbox" id="check">
         <label for="check" id="full">
@@ -27,6 +65,11 @@ body { margin: 0; padding: 0; }
                 <a href="javascript:set_car_routing()"><i class="fas fa-car"></i></a>
                 <a href="javascript:set_cycling_routing()"><i class="fas fa-bicycle"></i></a>
                 <a href="javascript:set_walking_routing()"><i class="fas fa-walking"></i></i></a>
+            </div>
+            <div id="clear">
+                <button class="btn btn-primary" type="submit" onclick=clear_route()>
+                    Clear
+                </button>
             </div>
             <div id="info">
                 <button class="btn btn-outline-success" type="submit" onclick=plan_route()>

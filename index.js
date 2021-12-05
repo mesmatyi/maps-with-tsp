@@ -6,6 +6,8 @@ let midpoints = []
 black_marker = true;
 plan_profile = 'walking';
 let multi_point = true;
+let marker_set = [];
+let segment_string = [];
 
 
 
@@ -111,6 +113,8 @@ function initMap(coords)
   zoom: zoom // starting zoom
   });
 
+  map.dragRotate.disable();
+
 
   map.on('load', () => {
     map.addSource('dem', {
@@ -137,34 +141,41 @@ function initMap(coords)
       if(black_marker == true)
       {
         black_markers.push(e.lngLat.wrap());
-        new mapboxgl.Marker({ color: 'black'})
+        let marker = new mapboxgl.Marker({ color: 'black'})
           .setLngLat([e.lngLat.wrap()['lng'],e.lngLat.wrap()['lat']])
           .addTo(map);
         black_marker = false;
+        marker_set.push(marker);
 
       }
       else
       {
         red_markers.push(e.lngLat.wrap());
-        new mapboxgl.Marker({ color: 'red'})
+        let marker = new mapboxgl.Marker({ color: 'red'})
           .setLngLat([e.lngLat.wrap()['lng'],e.lngLat.wrap()['lat']])
           .addTo(map);
+        marker_set.push(marker);
         black_marker = true;
-        map.addSource('route', {
+        let layer_name = "marker" + black_markers.length;
+        segment_string.push(layer_name);
+        map.addSource(layer_name, {
           'type': 'geojson',
           'data': {
           'type': 'Feature',
           'properties': {},
           'geometry': {
           'type': 'LineString',
-          'coordinates': route['routes'][0]['geometry']['coordinates']
+          'coordinates': [
+            [black_markers[black_markers.length-1]['lng'],black_markers[black_markers.length-1]['lat']],
+            [red_markers[red_markers.length-1]['lng'],red_markers[red_markers.length-1]['lat']]
+          ]
           }
           }
           });
           map.addLayer({
-            'id': 'route',
+            'id': layer_name,
             'type': 'line',
-            'source': 'route',
+            'source': layer_name,
             'layout': {
             'line-join': 'round',
             'line-cap': 'round'
@@ -179,9 +190,10 @@ function initMap(coords)
     else
     {
       black_markers.push(e.lngLat.wrap());
-        new mapboxgl.Marker({ color: 'black'})
+      let marker =  new mapboxgl.Marker({ color: 'black'})
           .setLngLat([e.lngLat.wrap()['lng'],e.lngLat.wrap()['lat']])
           .addTo(map);
+      marker_set.push(marker);
     }
   });
 
@@ -243,6 +255,7 @@ function initMap(coords)
       reverseGeocode: true
       })
     );
+    map.addControl(new mapboxgl.NavigationControl());
 }
 function routeCallback(route)
 {
@@ -292,6 +305,23 @@ function routeCallback(route)
   'line-width': 8
     }
   });
+}
+function clear_route()
+{
+  map.removeLayer('route');
+  map.removeSource('route');
+  marker_set.forEach(marker => {
+    marker.remove();
+  });
+  segment_string.forEach(segment => {
+    map.removeLayer(segment);
+    map.removeSource(segment);
+  })
+  segment_string = [];
+  marker_set = [];
+  black_markers = [];
+  red_markers = [];
+  MarkerArray = [];
 }
 
 function onStartedDownload(id) {
