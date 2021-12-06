@@ -62,17 +62,37 @@ body { margin: 0; padding: 0; }
             <i class="fas fa-times" id="cancel"></i>
         </label>
         <div class="sidebar">
+            <div class="points">
+                <b>Routing mode</b>
+            </div>
             <div class="types">
-                <a href="javascript:set_car_routing()"><i class="fas fa-car"></i></a>
+                <!-- <a href="javascript:set_car_routing()"><i class="fas fa-car"></i></a>
                 <a href="javascript:set_cycling_routing()"><i class="fas fa-bicycle"></i></a>
-                <a href="javascript:set_walking_routing()"><i class="fas fa-walking"></i></i></a>
+                <a href="javascript:set_walking_routing()"><i class="fas fa-walking"></i></i></a> -->
+                <div class="btn-group btn-group-toggle465" data-toggle="buttons1">
+                    <label class="btn btn-secondary active465">
+                      <input type="radio" name="model_routing" id="option1" autocomplete="off" onclick=set_car_routing() > Car
+                    </label>
+                    <label class="btn btn-secondary">
+                      <input type="radio" name="model_routing" id="option2" autocomplete="off" onclick=set_cycling_routing()> Cycling
+                    </label>
+                    <label class="btn btn-secondary">
+                      <input type="radio" name="model_routing" id="option3" autocomplete="off" checked onclick=set_walking_routing()> Walking
+                    </label>
+                  </div>
+            </div>
+            <div class="container-fluid">
+                <div class="routing_inputs">
+                    <b>Routing input options</b>
+                </div>
+                <!-- Content here -->
             </div>
             <div id="multi_point_toggle" class="btn-group btn-group-toggle" data-toggle="buttons">
                 <label class="btn btn-secondary active">
-                  <input type="radio" name="options" id="option1" autocomplete="off" checked onclick=toggle_multi_point()> Segments
+                  <input type="radio" name="options" id="option5" autocomplete="off" checked onclick=toggle_multi_point()> Segments
                 </label>
                 <label class="btn btn-secondary">
-                  <input type="radio" name="options" id="option2" autocomplete="off" onclick=toggle_multi_point()> Points
+                  <input type="radio" name="options" id="option6" autocomplete="off" onclick=toggle_multi_point()> Points
                 </label>
               </div>
             <div id="clear">

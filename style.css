@@ -96,8 +96,8 @@ label #cancel {
 }
 .sidebar .types {
   position: absolute;
-  top: 8px;
-  left: 40%;
+  top: 100px;
+  left: 50%;
   transform: translate(-50%);
   font-size: 25px;
   padding: 5px;
@@ -105,6 +105,13 @@ label #cancel {
 .points {
   position: absolute;
   top: 75px;
+  left: 25%;
+  color: #0a5275;
+}
+.routing_inputs {
+  position: absolute;
+  bottom: 300px;
+  left: 15%;
   color: #0a5275;
 }
 /* The snackbar - position it at the bottom and in the middle of the screen */
