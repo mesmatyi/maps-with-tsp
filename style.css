@@ -13,6 +13,18 @@
   bottom: 250px;
   left: 10%;
 }
+.points {
+  position: absolute;
+  top: 65px;
+  left: 25%;
+  color: #0a5275;
+}
+.routing_inputs {
+  position: absolute;
+  bottom: 300px;
+  left: 15%;
+  color: #0a5275;
+}
 #download {
   display: table;
   position: absolute;
@@ -101,18 +113,6 @@ label #cancel {
   transform: translate(-50%);
   font-size: 25px;
   padding: 5px;
-}
-.points {
-  position: absolute;
-  top: 75px;
-  left: 25%;
-  color: #0a5275;
-}
-.routing_inputs {
-  position: absolute;
-  bottom: 300px;
-  left: 15%;
-  color: #0a5275;
 }
 /* The snackbar - position it at the bottom and in the middle of the screen */
 #snackbar {
