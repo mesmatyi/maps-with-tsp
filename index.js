@@ -9,7 +9,16 @@ let multi_point = true;
 let marker_set = [];
 let segment_string = [];
 
+function promt_need_ofMarkers() {
+  // Get the snackbar DIV
+  var x = document.getElementById("snackbar");
 
+  // Add the "show" class to DIV
+  x.className = "show";
+
+  // After 3 seconds, remove the show class from DIV
+  setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+}
 
 let route_geojson = null;
 function toggle_multi_point()
@@ -504,6 +513,10 @@ function segment_distances()
   // }
   if(multi_point)
   {
+    if(black_markers.length != red_markers.length)
+    {
+      promt_need_ofMarkers();
+    }
     for(let i = 0; i < black_markers.length;i++)
     {
       coord_pairs.push({'black':black_markers[i],'red':red_markers[i]});
