@@ -13,13 +13,13 @@
   bottom: 250px;
   left: 10%;
 }
-.points {
+.sidebar .points {
   position: absolute;
   top: 65px;
   left: 25%;
   color: #0a5275;
 }
-.routing_inputs {
+.sidebar .routing_inputs {
   position: absolute;
   bottom: 300px;
   left: 15%;
