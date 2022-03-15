@@ -33,6 +33,8 @@ function toggle_multi_point()
   }
 }
 
+// Left out code
+
 function set_car_routing()
 {
   plan_profile = 'driving-traffic';
